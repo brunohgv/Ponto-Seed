@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     loadedRegisters: [
-    ]
+    ],
+    loading: false
   },
   mutations: {
     setLoadedRegisters (state, payload) {
@@ -22,10 +23,14 @@ export const store = new Vuex.Store({
       })
       register.closeDate = payload.closeDate
       register.open = payload.open
+    },
+    setLoading (state, payload) {
+      state.loading = payload
     }
   },
   actions: {
     loadRegisters ({commit}) {
+      commit('setLoading', true)
       firebase.database().ref('registers').once('value')
         .then((data) => {
           const registers = []
@@ -42,9 +47,11 @@ export const store = new Vuex.Store({
             })
           }
           commit('setLoadedRegisters', registers)
+          commit('setLoading', false)
         })
         .catch((error) => {
           console.log(error)
+          commit('setLoading', false)
         })
     },
     createRegister ({commit}, payload) {
@@ -86,6 +93,9 @@ export const store = new Vuex.Store({
       return state.loadedRegisters.sort((registerA, registerB) => {
         return registerA.openDate > registerB.openDate
       })
+    },
+    loading (state) {
+      return state.loading
     }
   }
 })

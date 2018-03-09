@@ -1,9 +1,17 @@
 <template>
   <v-app>
     <v-toolbar>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title><router-link to='/'>{{ title }}</router-link></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat @click.native.stop="dialog = true"><v-icon left>{{ icon }}</v-icon>{{ btnText }}</v-btn>
+      <v-btn flat
+        :key="buttons.btnText"
+        :to="buttons[0].link"><v-icon left>{{ buttons[0].icon }}</v-icon>{{ buttons[0].btnText }}
+      </v-btn>
+      <v-btn flat
+        @click.native.stop="dialog = true"
+        :key="buttons.btnText"
+        ><v-icon left>{{ buttons[1].icon }}</v-icon>{{ buttons[1].btnText }}
+      </v-btn>
     </v-toolbar>
     <main>
       <router-view></router-view>
@@ -55,8 +63,17 @@ export default {
       name: '',
       surname: '',
       title: 'Ponto Seed',
-      icon: 'done',
-      btnText: 'CheckIn',
+      buttons: [
+        {
+          icon: 'assessment',
+          btnText: 'Registros',
+          link: '/registers'
+        },
+        {
+          icon: 'done',
+          btnText: 'CheckIn'
+        }
+      ],
       dialog: false,
       modal: {
         title: 'Registrar Ponto',

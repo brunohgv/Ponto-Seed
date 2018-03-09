@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row wrap>
-      <v-flex mb-2 xs12 sm3 offset-sm2 v-for="register of registers" :key="register.cpf">
+      <v-flex mb-2 xs12 sm3 offset-sm2 v-for="register of registers" :key="register.openDate">
         <v-card v-if="register.open === true">
           <v-card-title>
             <div>
@@ -12,7 +12,7 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <h2>{{ register.openDate.toLocaleTimeString() }} - {{ hours }}:{{ minutes }}:{{ seconds }}</h2>
+            <h2>{{ register.openDate | dateFormat }} - {{ hours }}:{{ minutes }}:{{ seconds }}</h2>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="closeRegister(register)">Fechar Registro</v-btn>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getZeroPad, filterCpf } from '@/filters/Filters'
+import { getZeroPad, filterCpf, dateFormat } from '@/filters/Filters'
 export default {
   data () {
     return {
@@ -40,7 +40,8 @@ export default {
     }
   },
   filters: {
-    filterCpf
+    filterCpf,
+    dateFormat
   },
   mounted () {
     setInterval(this.updateDateTime, 1000)
@@ -55,6 +56,9 @@ export default {
     closeRegister (register) {
       register.open = false
       register.closeDate = new Date()
+      this.$store.dispatch('closeRegister', {
+        id: register.id
+      })
     }
   }
 }

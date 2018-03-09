@@ -20,7 +20,8 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <pre>{{ registers }}</pre>
+    <!-- JSON do firebase com os registros carregados -->
+    <!-- <pre>{{ registers }}</pre> -->
   </v-container>
 </template>
 

@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     formIsValid () {
-      return this.cpf.length === 11 || this.name !== '' || this.surname !== ''
+      return this.cpf.length === 11 && this.name !== '' && this.surname !== ''
     }
   },
   methods: {

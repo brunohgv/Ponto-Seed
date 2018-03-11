@@ -12,7 +12,7 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <h2>{{ register.openDate | dateFormat }} - {{ hours }}:{{ minutes }}:{{ seconds }}</h2>
+            <h2>{{ register.openDate | timeFormat }} - {{ hours }}:{{ minutes }}:{{ seconds }}</h2>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="closeRegister(register)">Fechar Registro</v-btn>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { getZeroPad, filterCpf, dateFormat } from '@/filters/Filters'
+import { getZeroPad, filterCpf, timeFormat } from '@/filters/Filters'
 export default {
   data () {
     return {
@@ -42,7 +42,7 @@ export default {
   },
   filters: {
     filterCpf,
-    dateFormat
+    timeFormat
   },
   mounted () {
     setInterval(this.updateDateTime, 1000)

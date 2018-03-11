@@ -1,8 +1,12 @@
 <template>
   <v-app>
     <v-toolbar>
-      <v-toolbar-title><router-link to='/'>{{ title }}</router-link></v-toolbar-title>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn flat
+        :key="buttons.btnText"
+        :to="buttons[2].link"><v-icon left>{{ buttons[2].icon }}</v-icon>{{ buttons[2].btnText }}
+      </v-btn>
       <v-btn flat
         :key="buttons.btnText"
         :to="buttons[0].link"><v-icon left>{{ buttons[0].icon }}</v-icon>{{ buttons[0].btnText }}
@@ -52,6 +56,16 @@
         </v-form>
       </v-card>
     </v-dialog>
+    <template>
+      <v-footer fixed>
+        <v-layout row>
+          <div>Desenvolvido por {{ author }}</div>
+          <v-spacer></v-spacer>
+          <div>&copy; {{ new Date().getFullYear() }} Seed a Bit Tecnologia</div>
+        </v-layout>
+      </v-footer>
+    </template>
+
   </v-app>
 </template>
 
@@ -62,16 +76,22 @@ export default {
       cpf: '',
       name: '',
       surname: '',
+      author: 'Bruno Vasconcelos <brunohgv2@gmail.com>',
       title: 'Ponto Seed',
       buttons: [
         {
-          icon: 'assessment',
+          icon: 'assignment',
           btnText: 'Registros',
           link: '/registers'
         },
         {
           icon: 'done',
           btnText: 'CheckIn'
+        },
+        {
+          icon: 'assignment_ind',
+          btnText: 'Pontos Ativos',
+          link: '/'
         }
       ],
       dialog: false,

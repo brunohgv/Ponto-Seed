@@ -24,12 +24,12 @@
           <template slot="items" slot-scope="props">
             <td>{{ props.item.name }}</td>
             <td>{{ props.item.surname }}</td>
-            <td>{{ props.item.cpf }}</td>
-            <td>{{ props.item.openDate }}</td>
-            <td>{{ props.item.closeDate }}</td>
-            <td>{{  }}</td>
+            <td>{{ props.item.cpf | filterCpf }}</td>
+            <td>{{ props.item.openDate | comprehensiveDate }}</td>
+            <td>{{ props.item.closeDate | comprehensiveDate }}</td>
+            <td>{{ totalTimeBetween(props.item.openDate, props.item.closeDate) }}</td>
           </template>
-          <template slot="no-data">
+          <template v-if="!loading" slot="no-data">
             <v-alert :value="true" color="error" icon="warning">
               Estamos sem dados :(
             </v-alert>
@@ -37,38 +37,74 @@
           <v-alert slot="no-results" :value="true" color="error" icon="warning">
             Não achamos nenhum resultado para "{{ search }}" :(
           </v-alert>
+          <template slot="page-text">
+
+          </template>
       </v-data-table>
     </v-card>
-    <pre>{{ registers }}</pre>
+    <!-- JSON do firebase com os registros carregados
+    <pre>{{ registers }}</pre> -->
   </v-container>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        search: '',
-        headers: [
-          {text: 'Nome', value: 'name'},
-          {text: 'Sobrenome', value: 'surname'},
-          {text: 'CPF', value: 'cpf'},
-          {text: 'Data de Chegada', value: 'openDate'},
-          {text: 'Data de saída', value: 'closeDate'},
-          {text: 'Carga horária', value: 'hours'}
-        ],
-        items: [{name: 'Bruno', surname: 'Vasconcelos'}]
-      }
+import { filterCpf, comprehensiveDate } from '@/filters/Filters'
+export default {
+  data () {
+    return {
+      search: '',
+      headers: [
+        {text: 'Nome', value: 'name'},
+        {text: 'Sobrenome', value: 'surname'},
+        {text: 'CPF', value: 'cpf'},
+        {text: 'Data de Chegada', value: 'openDate'},
+        {text: 'Data de saída', value: 'closeDate'},
+        {text: 'Carga horária', value: 'hours'}
+      ],
+      items: [{name: 'Bruno', surname: 'Vasconcelos'}]
+    }
+  },
+  computed: {
+    registers () {
+      return this.$store.getters.loadedRegisters
     },
-    computed: {
-      registers () {
-        return this.$store.getters.loadedRegisters
-      },
-      loading () {
-        return this.$store.getters.loading
+    loading () {
+      return this.$store.getters.loading
+    }
+  },
+  filters: {
+    filterCpf,
+    comprehensiveDate
+  },
+  methods: {
+    totalTimeBetween (stringDate1, stringDate2) {
+      var date1 = new Date(stringDate1)
+      var date2 = new Date(stringDate2)
+      var hours = date2.getHours() - date1.getHours()
+      var minutes = date2.getMinutes() - date1.getMinutes()
+      var seconds = date2.getSeconds() - date1.getSeconds()
+      if (seconds < 0) {
+        minutes--
+        seconds = 60 + seconds
       }
-    },
-    methods: {
-
+      if (minutes < 0) {
+        hours--
+        minutes = 60 + minutes
+      }
+      if (hours < 0) {
+        hours = 24 + hours
+      }
+      if (seconds < 10) {
+        seconds = '0' + seconds
+      }
+      if (minutes < 10) {
+        minutes = '0' + minutes
+      }
+      if (hours < 10) {
+        hours = '0' + hours
+      }
+      return hours + ':' + minutes + ':' + seconds
     }
   }
+}
 </script>

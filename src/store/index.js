@@ -79,6 +79,7 @@ export const store = new Vuex.Store({
       const updateObj = {}
       updateObj.closeDate = new Date().toISOString()
       updateObj.open = false
+
       firebase.database().ref('registers').child(payload.id).update(updateObj)
         .then(() => {
           commit('closeRegister', payload)
